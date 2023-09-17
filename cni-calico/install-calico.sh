@@ -1,9 +1,8 @@
 #!/bin/bash
 
-# Specify the POD_CIDR value here, or leave it empty for user input
-POD_CIDR="172.15.0.0/16" # Update it with the value provided when instantiating the cluster
+POD_CIDR="172.15.0.0/16" # Provide the same value specified when deploying the Kubernetes cluster
 
-# Check if POD_CIDR is still empty, and if so, print an error and exit
+# Check if POD_CIDR is empty, and if so, print an error and exit
 if [ -z "$POD_CIDR" ]; then
     echo "Error: POD_CIDR value not provided."
     exit 1
