@@ -3,15 +3,11 @@
 # Script to install Kubernetes via kubeadm using containerd as the container runtime.
 #####################################################################################
 
-##################
-# START OF VARIABLES
-K8S_VERSION=1.28.2-1.1
-MASTER_NODE_IP=172.28.5.188
-POD_CIDR=172.15.0.0/16
-# END OF VARIABLES
-##################
+K8S_VERSION=1.28.2-1.1       # Used for master and worker installation
+MASTER_NODE_IP=172.28.5.188  # Used for master installation
+POD_CIDR=172.15.0.0/16       # Used for master installation
 
-# Check if any variable is missing
+# Check if Kubernetes version variable is missing
 if [ -z "$K8S_VERSION" ] || [ -z "$MASTER_NODE_IP" ] || [ -z "$POD_CIDR" ]; then
     echo "Error: One or more variables are missing. Please set all variables."
     exit 1
@@ -58,8 +54,7 @@ sudo apt update
 sudo apt install containerd.io
 
 # Set the cgroup driver for runc to systemd
-# Create the containerd configuration file (containerd by default takes the config looking
-# at /etc/containerd/config.toml)
+# Create the containerd configuration file (containerd by default takes the config looking at /etc/containerd/config.toml)
 sudo mkdir -p /etc/containerd
 sudo containerd config default | sudo tee /etc/containerd/config.toml
 sudo sed -i 's/SystemdCgroup \= false/SystemdCgroup \= true/' /etc/containerd/config.toml
@@ -100,8 +95,8 @@ if $IS_MASTER; then
     sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
     sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
-    # Untaint master nodes
+    # Untaint master node (in order to run workloads on it (comment it in case this is not the intended behaviour)
     kubectl taint nodes --all node-role.kubernetes.io/control-plane-
 else
-    echo "Do no forget to join the worker to the cluster!"
+    echo "As a last step, please join the worker to the cluster (use the token obtained in the master after installing it"
 fi
