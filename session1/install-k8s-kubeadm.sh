@@ -5,11 +5,17 @@
 
 ##################
 # START OF VARIABLES
-K8S_VERSION=1.28.0-00
+K8S_VERSION=1.28.2-1.1
 MASTER_NODE_IP=172.28.5.188
 POD_CIDR=172.15.0.0/16
 # END OF VARIABLES
 ##################
+
+# Check if any variable is missing
+if [ -z "$K8S_VERSION" ] || [ -z "$MASTER_NODE_IP" ] || [ -z "$POD_CIDR" ]; then
+    echo "Error: One or more variables are missing. Please set all variables."
+    exit 1
+fi
 
 # Differenciate between Master and Worker node.
 while true; do
@@ -20,12 +26,6 @@ while true; do
         * ) echo "Please answer yes or no.";;
     esac
 done
-
-# Check if MASTER_NODE_IP has been provided
-if [ -z "$MASTER_NODE_IP" ]; then
-    echo "Error: MASTER_NODE_IP is not provided. Please set the MASTER_NODE_IP variable."
-    exit 1
-fi
 
 ###############################
 # CRI Installation: Containerd
@@ -78,8 +78,12 @@ sudo sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
 # Update the apt package index and install packages needed to use the Kubernetes apt repository
 sudo apt-get update && sudo apt-get install -y apt-transport-https curl
 
+# Check which versions are available
+# apt-cache madison kubelet kubeadm kubectl
+
 # Download public signing key for the Kubernetes package repository
 sudo curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+
 # Add the Kubernetes apt repository
 echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
 
