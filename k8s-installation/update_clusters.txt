@@ -1,0 +1,77 @@
+# Mirar cuantos nodos tenemos en nuestro cluser
+kubectl get nodes
+
+# Comprobar distribución y detalles tecnicos
+cat /etc/*release*
+
+# Actualizar apt y buscar que versiones hay disponibles y seleccionar a la que se quiera actualizar
+apt upgrade
+apt-cache madison kubernetes
+
+# Pasamos a actualizar el Control Plane Node (cambiamos el "x" por la versión que queramos instalar)
+# Este paso descargará la versión de kubeadm que queramos (no la instalará)
+apt-mark unhold kubeadm && \
+apt-get update && apt-get install -y kubeadm='1.28.x-*' && \
+apt-mark hold kubeadm
+
+# Comprobamos que se haya descargado correctamente
+kubeadm version
+
+# Pasamos a comprobar el plan de actualización
+kubeadm upgrade plan
+
+# Una vez hemos comprobado que es correcto actualizar el nodo con la versión descargada paramos a instalarlo
+sudo kubeadm upgrade apply <version>
+
+# Comprobar si tienes un proceso de kubelet corriendo en el Control Plane Node
+# En caso que lo tengas si estos pasos
+kubectl drain controlplane --ignore-daemonset
+
+# Comprobar que se haya deshabilitado el "scheduling"
+kubectl get nodes
+
+# Descarga y actualiza la versión de kubectl y kubelet que quieras, cambiando "x" por la versión requerida
+apt-mark unhold kubelet kubectl && \
+apt-get update && apt-get install -y kubelet='1.28.x-*' kubectl='1.28.x-*' && \
+apt-mark hold kubelet kubectl
+
+# Para completar la actualización resetea los procesos daemon y kubelet
+sudo systemctl daemon-reload
+sudo systemctl restart kubelet
+
+# Comprobar que se haya actualizado correctamente, debería salir la versión correcta en;
+kubectl get nodes
+
+# Pasar a permitir el scheduling
+kubectl uncordon controlplane
+
+#-----------------ACTUALIZAR WORKER NODES-------------
+# Descargar versión de kubeadm que queramos
+apt-mark unhold kubeadm && \
+apt-get update && apt-get install -y kubeadm='1.28.x-*' && \
+apt-mark hold kubeadm
+
+# Correr siguiente comando para instalar nueva versión
+sudo kubeadm upgrade node
+
+# Saca los PODs que esten corriendo y deshabilita del nodo (IMPORTANTE HACER SIGUIENTE PASO EN EL CONTROLPLANE NODE)
+kubectl drain <node_name> --ignore-daemonsets
+
+# Comprueba que se ha hecho bien el paso, debería salir "SchedulingDisabled" en la columna Status del nodo
+kubectl get nodes
+
+# Instalar kubelet y kubectl
+apt-mark unhold kubelet kubectl && \
+apt-get update && apt-get install -y kubelet='1.28.x-*' kubectl='1.28.x-*' && \
+apt-mark hold kubelet kubectl
+
+# Resetea el proceso de kubelet
+sudo systemctl daemon-reload
+sudo systemctl restart kubelet
+
+# Comprueba que todo sea correcto
+kubeclt get nodes
+
+# Habilita el nodo
+kubectl uncordon <node_name>
+
