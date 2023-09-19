@@ -9,10 +9,17 @@
 # POD_CIDR=172.15.0.0/16       # Used for master installation
 # IS_MASTER=true
 
-# Check if Kubernetes version and POD_CIDR variables are missing
+# Check if mandatory variables are missing
 if [ -z "$K8S_VERSION" ] || [ -z "$POD_CIDR" ] || [ -z "$IS_MASTER" ]; then
     echo "Error: One or more variables are missing. Please set all variables."
     exit 1
+fi
+
+# Check if IS_MASTER is either true or false
+if [[ "$IS_MASTER" == "true" || "$IS_MASTER" == "false" ]]; then
+    echo "IS_MASTER is set to either 'true' or 'false'."
+else
+    echo "IS_MASTER is not set to 'true' or 'false'."
 fi
 
 # Check if IS_MASTER is true, then check if MASTER_NODE_IP is missing
