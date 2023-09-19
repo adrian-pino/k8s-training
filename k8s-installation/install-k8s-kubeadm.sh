@@ -2,26 +2,24 @@
 #####################################################################################
 # Script to install Kubernetes via kubeadm using containerd as the container runtime.
 #####################################################################################
+# Tested with Ubuntu 20.04 & 22.04
 
-K8S_VERSION=1.28.2-1.1       # Used for master and worker installation
-MASTER_NODE_IP=172.28.5.188  # Used for master installation
-POD_CIDR=172.15.0.0/16       # Used for master installation
+# K8S_VERSION=1.28.2-1.1       # Used for master and worker installation
+# MASTER_NODE_IP=172.28.5.30   # Used for master installation
+# POD_CIDR=172.15.0.0/16       # Used for master installation
+# IS_MASTER=true
 
-# Check if Kubernetes version variable is missing
-if [ -z "$K8S_VERSION" ] || [ -z "$MASTER_NODE_IP" ] || [ -z "$POD_CIDR" ]; then
+# Check if Kubernetes version and POD_CIDR variables are missing
+if [ -z "$K8S_VERSION" ] || [ -z "$POD_CIDR" ] || [ -z "$IS_MASTER" ]; then
     echo "Error: One or more variables are missing. Please set all variables."
     exit 1
 fi
 
-# Differenciate between Master and Worker node.
-while true; do
-    read -p "Is this a master node? (y or n): " yn
-    case $yn in
-        [Yy]* ) IS_MASTER=true; break;;
-        [Nn]* ) IS_MASTER=false; break;;
-        * ) echo "Please answer yes or no.";;
-    esac
-done
+# Check if IS_MASTER is true, then check if MASTER_NODE_IP is missing
+if [ "$IS_MASTER" = "true" ] && [ -z "$MASTER_NODE_IP" ]; then
+    echo "Error: IS_MASTER is set to true but MASTER_NODE_IP is missing. Please set the MASTER_NODE_IP variable."
+    exit 1
+fi
 
 ###############################
 # CRI Installation: Containerd
