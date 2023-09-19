@@ -16,7 +16,7 @@ if [ -z "$K8S_VERSION" ] || [ -z "$POD_CIDR" ] || [ -z "$IS_MASTER" ]; then
 fi
 
 # Check if IS_MASTER is either true or false
-if [[ "$IS_MASTER" != "true" || "$IS_MASTER" != "false" ]]; then
+if [[ "$IS_MASTER" != "true" && "$IS_MASTER" != "false" ]]; then
     echo "IS_MASTER is not set to either 'true' or 'false'."
     exit 1
 fi
