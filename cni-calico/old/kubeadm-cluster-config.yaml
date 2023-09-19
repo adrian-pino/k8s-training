@@ -1,4 +1,0 @@
-apiVersion: kubeadm.k8s.io/v1beta3
-kind: ClusterConfiguration
-networking:
-  podSubnet: 172.15.0.0/16  # Replace with your desired POD_CIDR
