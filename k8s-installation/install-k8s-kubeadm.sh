@@ -4,26 +4,26 @@
 #####################################################################################
 # Tested with Ubuntu 20.04 & 22.04
 
-# K8S_VERSION=1.28.2-1.1       # Needed for master and worker installation
-# IS_MASTER=true               # Needed for master and worker installation
-# MASTER_NODE_IP=172.28.5.30   # Needed for master installation
-# POD_CIDR=172.15.0.0/16       # Needed for master installation
+#K8S_VERSION=1.28.2-1.1       # Needed for master and worker installation
+#IS_MASTER=true               # Needed for master and worker installation
+#MASTER_NODE_IP=172.28.5.30   # Needed for master installation
+#POD_CIDR=172.15.0.0/16       # Needed for master installation
 
 # Check if mandatory variables are missing
-if [ -z "$K8S_VERSION" ] || [ -z "$IS_MASTER" ] || [ -z "$POD_CIDR" ]; then
-    echo "Error: One or more variables are missing. Please set all variables."
+if [ -z "$K8S_VERSION" ] || [ -z "$IS_MASTER" ]; then
+    echo "Error: Either K8S_VERSION or IS_MASTER variables are missing. Please set them."
     exit 1
 fi
 
 # Check if IS_MASTER is either true or false
-if [[ "$IS_MASTER" != "true" && "$IS_MASTER" != "false" ]]; then
+if [ "$IS_MASTER" != "true" ] && [ "$IS_MASTER" != "false" ]; then
     echo "IS_MASTER is not set to either 'true' or 'false'."
     exit 1
 fi
 
-# Check if IS_MASTER is true, then check if MASTER_NODE_IP is missing
-if [ "$IS_MASTER" = "true" ] && [ -z "$MASTER_NODE_IP" ]; then
-    echo "Error: IS_MASTER is set to true but MASTER_NODE_IP is missing. Please set the MASTER_NODE_IP variable."
+# Check if IS_MASTER is true, then check if MASTER_NODE_IP or POD_CIDR are missing
+if [ "$IS_MASTER" = "true" ] && ([ -z "$MASTER_NODE_IP" ] || [ -z "$POD_CIDR" ]  ); then
+    echo "Error: IS_MASTER is set to true but MASTER_NODE_IP and/or POD_CIDR are  missing. Please set them."
     exit 1
 fi
 
@@ -54,7 +54,7 @@ sudo mkdir -p /etc/apt/keyrings
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
   $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
-sudo apt update
+sudo apt update -y
 sudo apt install containerd.io
 
 # Set the cgroup driver for runc to systemd
@@ -80,9 +80,10 @@ sudo apt-get update && sudo apt-get install -y apt-transport-https curl
 # Check which versions are available
 # apt-cache madison kubelet kubeadm kubectl
 
-K8S_MAJOR_VERSION=${K8S_VERSION%%.*}
-K8S_MINOR_VERSION=${K8S_VERSION#*.}
-K8S_URL="https://pkgs.k8s.io/core:/stable:/v$K8S_MAJOR_VERSION.$K8S_MINOR_VERSION/deb/Release.key"
+K8S_VERSION="1.28.2-1.1"
+K8S_KEY_VERSION=$(echo "$K8S_VERSION" | cut -d'.' -f1-2)
+
+K8S_URL="https://pkgs.k8s.io/core:/stable:/v$K8S_KEY_VERSION/deb/Release.key"
 
 # Download public signing key for the Kubernetes package repository
 sudo curl -fsSL "$K8S_URL" | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
