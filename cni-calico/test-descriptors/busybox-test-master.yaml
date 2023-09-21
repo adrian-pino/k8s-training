@@ -5,7 +5,7 @@ metadata:
   labels:
     app.kubernetes.io/name: busybox-test
 spec:
-  nodeName: training-k8s-master
+  nodeName: k8s-master
   containers:
   - name: busybox-test
     image: busybox
