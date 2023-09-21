@@ -55,7 +55,7 @@ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o 
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
   $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
 sudo apt update -y
-sudo apt install containerd.io
+sudo apt install containerd.io -y
 
 # Set the cgroup driver for runc to systemd
 # Create the containerd configuration file (containerd by default takes the config looking at /etc/containerd/config.toml)
