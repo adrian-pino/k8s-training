@@ -2,7 +2,7 @@
 #####################################################################################
 # Script to install Kubernetes via kubeadm using containerd as the container runtime.
 #####################################################################################
-# Tested with Ubuntu 20.04 & 22.04
+# Tested with Ubuntu 20.04
 
 K8S_VERSION=1.28.2-1.1       # Needed for master and worker installation
 IS_MASTER=true               # Needed for master and worker installation
