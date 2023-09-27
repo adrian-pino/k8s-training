@@ -4,10 +4,10 @@
 #####################################################################################
 # Tested with Ubuntu 20.04
 
-K8S_VERSION=1.28.2-1.1       # Needed for master and worker installation
-IS_MASTER=true               # Needed for master and worker installation
-MASTER_NODE_IP=172.28.5.30   # Needed for master installation
-POD_CIDR=192.168.0.0/16     # Needed for master installation
+# K8S_VERSION=1.28.2-1.1       # Needed for master and worker installation
+# IS_MASTER=true               # Needed for master and worker installation
+# MASTER_NODE_IP=172.28.5.30   # Needed for master installation (not used in worker installation)
+# POD_CIDR=192.168.0.0/16      # Needed for master installation (not used in worker installation)
 
 # Check if mandatory variables are missing
 if [ -z "$K8S_VERSION" ] || [ -z "$IS_MASTER" ]; then
