@@ -87,7 +87,7 @@ K8S_URL="https://pkgs.k8s.io/core:/stable:/v$K8S_KEY_VERSION/deb/Release.key"
 sudo curl -fsSL "$K8S_URL" | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 
 # Add the Kubernetes apt repository
-echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v$K8S_KEY_VERSION/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
 
 # install kubelet, kubeadm and kubectl, and pin their version
 sudo apt-get update
