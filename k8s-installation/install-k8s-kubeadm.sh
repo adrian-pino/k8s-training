@@ -80,9 +80,7 @@ sudo apt-get update && sudo apt-get install -y apt-transport-https curl
 # Check which versions are available
 # apt-cache madison kubelet kubeadm kubectl
 
-K8S_VERSION="1.28.2-1.1"
 K8S_KEY_VERSION=$(echo "$K8S_VERSION" | cut -d'.' -f1-2)
-
 K8S_URL="https://pkgs.k8s.io/core:/stable:/v$K8S_KEY_VERSION/deb/Release.key"
 
 # Download public signing key for the Kubernetes package repository
