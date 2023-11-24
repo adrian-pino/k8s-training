@@ -13,8 +13,6 @@ This directory focuses on the Calico Container Network Interface (CNI) plugin fo
 ### 3. services
 The `services` directory provides resources to understand and implement various Kubernetes Service types. It covers aspects like ClusterIP, NodePort, and load balancing within Kubernetes, offering practical examples and configurations.
 
----
-
 ## Best practices
 
 Utilizing efficient tools and practices can significantly streamline your workflow. Here are some recommended practices and tools:
