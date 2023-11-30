@@ -31,11 +31,20 @@ Utilizing efficient tools and practices can significantly streamline your workfl
 - You can merge multiple `kubeconfig` files into a single file using the following commands:
 
    ```bash
-   # Merge ~/.kube/config-cluster-1 and ~/.kube/config-cluster-2 into new config /tmp/config
-   KUBECONFIG=~/.kube/config-cluster-1:~/.kube/config-cluster-2 kubectl config view --flatten > /tmp/config
+   # Security copy of the current kubeconfig file
+   cp ~/.kube/config ~/.kube/sec_copy_config
 
-   # Replace old config with new merged config
-   mv /tmp/config ~/.kube/config
+   # I store all kubeconfig files in the same folder (e.g: ~/.kube/config-files)
+   # Then I merge all the kubeconfig files in a single one, and I update the config file
+   export KUBECONFIG=$(printf "%s:" ~/.kube/config-files/*)
+   kubectl config view --flatten > ~/.kube/config
+
+   # Then different context could be managed with kubectx
+   adrian@adrian-personal:~$ kubectx
+   kubernetes-admin@aws-clusterA
+   kubernetes-dev@aws-clusterA
+   kubernetes-admin@openstack-clusterB
+   kubernetes-dev@openstack-clusterB
    ```
 
 ### Additional Tips
