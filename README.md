@@ -32,13 +32,18 @@ Utilizing efficient tools and practices can significantly streamline your workfl
 
    ```bash
    # Security copy of the current kubeconfig file
-   cp ~/.kube/config ~/.kube/sec_copy_config
+   mv ~/.kube/config ~/.kube/sec_copy_config
 
-   # I store all kubeconfig files in the same folder (e.g: ~/.kube/config-files)
-   # Then I merge all the kubeconfig files in a single one, and I update the config file
+   # Store all kubeconfig files in the same folder (e.g: ~/.kube/config-files)
+   # Modify temporarily the KUBECONFIG path, targetting the kubeconfig files folder
    export KUBECONFIG=$(printf "%s:" ~/.kube/config-files/*)
+   
+   # Merge all the kubeconfig files, creating a new "config" file
    kubectl config view --flatten > ~/.kube/config
 
+   # Set again the default KUBECONFIG path
+   export KUBECONFIG=~/.kube/config
+   
    # Then different context could be managed with kubectx
    adrian@adrian-personal:~$ kubectx
    kubernetes-admin@aws-clusterA
