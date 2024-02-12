@@ -3,7 +3,11 @@
 # Script to install Calico CNI
 #####################################################################################
 
+# ref: https://docs.tigera.io/calico/latest/getting-started/kubernetes/self-managed-onprem/onpremises
+
+CALICO_VERSION="v3.26.1"
 #POD_CIDR="172.15.0.0/16" # Provide the same value specified at provisioning time
+
 # Note:
 # POD_CIDR could be checked running (kubectl -n kube-system describe cm kubeadm-config)
 # In case no POD_CIDR was specified at kubeadm provisioning time, comment the update step (*).
@@ -16,11 +20,11 @@ fi
 
 # Install the operator
 echo "Installing the Calico operator..."
-kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.1/manifests/tigera-operator.yaml
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/$CALICO_VERSION/manifests/tigera-operator.yaml
 
 # Download custom resources
 echo "Downloading custom resources..."
-curl https://raw.githubusercontent.com/projectcalico/calico/v3.26.1/manifests/custom-resources.yaml -o custom-resources.yaml
+curl https://raw.githubusercontent.com/projectcalico/calico/$CALICO_VERSION/manifests/custom-resources.yaml -o custom-resources.yaml
 
 # Update the custom-resources.yaml with the specified POD_CIDR value
 # ------------------------------------------------------------------------
