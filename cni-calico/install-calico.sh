@@ -6,7 +6,7 @@
 #POD_CIDR="172.15.0.0/16" # Provide the same value specified at provisioning time
 # Note:
 # POD_CIDR could be checked running (kubectl -n kube-system describe cm kubeadm-config)
-# In case no POD_CIDR was specified at kubeadm provisioning time, comment the update step.
+# In case no POD_CIDR was specified at kubeadm provisioning time, comment the update step (*).
 
 # Check if POD_CIDR is empty, and if so, print an error and exit
 if [ -z "$POD_CIDR" ]; then
@@ -22,9 +22,12 @@ kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.1
 echo "Downloading custom resources..."
 curl https://raw.githubusercontent.com/projectcalico/calico/v3.26.1/manifests/custom-resources.yaml -o custom-resources.yaml
 
-# Update the custom-resources.yaml with the specified POD_CIDR value (Comment it if no POD_CIDR was specified at kubeadm provisioning time)
+# Update the custom-resources.yaml with the specified POD_CIDR value
+# ------------------------------------------------------------------------
+# (*) Comment these lines if no POD_CIDR was specified at kubeadm provisioning time (aka we're using the default CIDR).
 echo "Updating custom-resources.yaml with POD_CIDR=$POD_CIDR"
 sed -i "s|cidr:.*|cidr: $POD_CIDR|" custom-resources.yaml
+# ------------------------------------------------------------------------
 
 # Create the manifest to install Calico
 echo "Creating the manifest to install Calico..."
