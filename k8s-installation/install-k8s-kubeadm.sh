@@ -4,10 +4,13 @@
 #####################################################################################
 # Tested with Ubuntu 20.04
 
+# VARIABLES
+################################
 # K8S_VERSION=1.28.2-1.1                                     # Needed for master and worker installation
 # IS_MASTER=true|false                                       # Needed for master and worker installation
 # MASTER_NODE_IP=x.y.z.t                                     # Needed for master installation (not used in worker installation)
 # POD_CIDR=172.15.0.0/16 (modify with your desired CIDR)     # Needed for master installation (not used in worker installation)
+################################
 
 # Check if mandatory variables are missing
 if [ -z "$K8S_VERSION" ] || [ -z "$IS_MASTER" ]; then
