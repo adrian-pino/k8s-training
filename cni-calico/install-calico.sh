@@ -5,8 +5,11 @@
 
 # ref: https://docs.tigera.io/calico/latest/getting-started/kubernetes/self-managed-onprem/onpremises
 
-CALICO_VERSION="v3.26.1"
-POD_CIDR="x.y.z.t/16" # Provide the same value specified at provisioning time
+# VARIABLES
+################################
+# CALICO_VERSION="v3.26.1"
+# POD_CIDR="172.15.0.0/16"         # Reminder: Provide the same value specified at provisioning time
+################################
 # Note: POD_CIDR could be checked running (kubectl -n kube-system describe cm kubeadm-config)
 # In case no POD_CIDR was specified at kubeadm provisioning time, comment the update step (*).
 
