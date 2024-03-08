@@ -5,7 +5,7 @@
 # Tested with Ubuntu 20.04
 
 # K8S_VERSION=1.28.2-1.1       # Needed for master and worker installation
-# IS_MASTER=true               # Needed for master and worker installation
+# IS_MASTER=true|false         # Needed for master and worker installation
 # MASTER_NODE_IP=x.y.z.t       # Needed for master installation (not used in worker installation)
 # POD_CIDR=172.15.0.0/16       # Needed for master installation (not used in worker installation)
 
